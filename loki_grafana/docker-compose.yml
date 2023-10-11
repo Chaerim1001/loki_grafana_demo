@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  grafana:
+    image: grafana/grafana:9.3.6
+    ports:
+      - 3000:3000
+    volumes:
+      - ./config/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yaml
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=false
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=false
+    networks:
+      - app
+    depends_on:
+      - loki
+
+  loki:
+    image: grafana/loki:2.7.4
+    ports:
+      - 3100:3100
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - app
+
+networks:
+  app:
+    name: app

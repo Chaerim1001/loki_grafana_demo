@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  application:
+    image: ${YOUR_APPLICATION_IMAGE}
+    container_name: application
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
+    restart: always
+    ports:
+      - 80: ${APPLICATION_PORT}
+      - 443: ${APPLICATION_PORT}
+    networks:
+      - app
+
+  promtail:
+    image: grafana/promtail:2.7.4
+    container_name: promtail
+    volumes:
+      - ./config/promtail.yaml:/etc/promtail/docker-config.yaml
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: -config.file=/etc/promtail/docker-config.yaml
+    networks:
+      - app
+
+networks:
+  app:
+    name: app
