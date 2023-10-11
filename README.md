@@ -74,7 +74,10 @@ $ docker-compose up -d
 $ docker-compose up -d
 ```
 
-### 동작 확인
+<br>
+
+동작 확인
+---
 (1) public subnet에 있는 인스턴스에 할당받은 public ip를 통해 Grafana 대시보드에 접속합니다.
 ```
 http://${PUBLIC_IP}:3000
